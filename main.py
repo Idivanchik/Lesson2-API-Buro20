@@ -4,9 +4,9 @@ import requests
 import argparse
 
 
-def get_course(currency):
+def get_course(currency, api_key):
     try:
-        response = requests.get(f"https://v6.exchangerate-api.com/v6/7652ef7021337955ea472b64/latest/{currency}")
+        response = requests.get(f"https://v6.exchangerate-api.com/v6/{api_key}/latest/{currency}")
         response.raise_for_status()
         course = response.json()["conversion_rates"]
     except requests.HTTPError:
@@ -27,7 +27,7 @@ def main():
     parser.add_argument("-t", "--target", help="Введите целевую валюту. (По умолчанию иены)", required=False, default="JPY")
     parser.add_argument("-a", "--amount", help="Введите сумму. (По умолчанию 1000)", required=False, default="1000")
     args = parser.parse_args()
-    course = get_course(args.base)
+    course = get_course(args.base, api_key)
     target_rate = args.target
     print(f"Итоговая сумма: {convert_amount(course, target_rate, int(args.amount))} {target_rate}")
 
